@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-0lt*$*-p4v41ie_x#x&g-f3w!pg$2t^f3=7zwlj@a02v3_0**1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['multilang-site-cj36.onrender.com']
 
 # Application definition
 
@@ -125,6 +124,7 @@ USE_TZ = True
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale/')
 ]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
