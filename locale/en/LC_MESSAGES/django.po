@@ -1,0 +1,45 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-23 22:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\main\templates\main\detail.html:13
+msgid "Publié:"
+msgstr "Published:"
+
+#: .\main\templates\main\index.html:6 .\main\templates\main\index.html:24
+msgid "Articles"
+msgstr "Articles"
+
+#: .\main\templates\main\index.html:26
+msgid "Langue"
+msgstr "Language"
+
+#: .\main\templates\main\index.html:58
+msgid "Chatbot"
+msgstr ""
+
+#: .\main\templates\main\index.html:66
+msgid "Bonjour! Comment puis-je vous aider aujourd'hui?"
+msgstr "Hello! How can I help you today?"
+
+#: .\main\templates\main\index.html:72
+msgid "Tapez votre message..."
+msgstr "Write your message..."
+
+#: .\multilang_site\settings.py:115
+msgid "English"
+msgstr ""
+
+#: .\multilang_site\settings.py:116
+msgid "French"
+msgstr ""

@@ -1,0 +1,190 @@
+{% load i18n %} {% load static %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% trans 'Articles' %}</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/style.css' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
+    <div class="main">
+      <div style="display: flex; justify-content: space-between">
+        <h1>{% trans 'Articles' %}</h1>
+        <div class="dropdown">
+          <button class="dropbtn">{% trans 'Langue' %}</button>
+          <div class="dropdown-content">
+            {% get_current_language as LANGUAGE_CODE %} {% get_available_languages as LANGUAGES %} {% for lang in LANGUAGES %}
+            <a href="/{{ lang.0 }}/main/">{% trans lang.1 %}</a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="articles">
+        {% for article in articles %}
+        <div class="article">
+          <h2>
+            <a href="/{{LANGUAGE_CODE}}/main/{{ article.id }}/"
+              >{{ article.title }}</a
+            >
+          </h2>
+          <p class="date">{{ article.publication_date|date:"j F Y" }}</p>
+          <p>{{ article.content }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      <button class="chatbot-toggler" onclick="toggleChatbot()">
+        <span class="material-symbols-outlined" id = "chat">
+            chat_bubble
+        </span>
+        <span class="material-symbols-outlined" id = "exit" style =" display:none;">
+                close
+        </span>
+    </button>
+      <div class="chat-bubble" id="chat-bubble" style = "display: none">
+        <header>
+          <h2>{% trans "Chatbot" %}</h2>
+        </header>
+        <div class="chat-box" id ="chat-box">
+            <div class="message" data-sender="chatbot">
+                <div class="chatbot-message">
+                    <div class="avatar-username">
+                        <span class="material-symbols-outlined">smart_toy</span>
+                    </div>
+                    <p class="message-text chatbot-text">{% trans "Bonjour! Comment puis-je vous aider aujourd'hui?" %}</p>
+                </div>
+            </div>
+            
+        </div>
+        <div class="chat-input">
+            <textarea id ="user-input" placeholder='{% trans "Tapez votre message..." %}' required></textarea>
+            <span class="material-symbols-outlined" onclick="sendMessage()">
+                send
+                </span>
+        </div>
+      </div>
+    </div>
+    <script>
+      function toggleChatbot() {
+        var chatbot = document.getElementById("chat-bubble");
+        var chat = document.getElementById("chat");
+        var exit = document.getElementById("exit");
+
+        if(chatbot.style.display === "none"){
+            chatbot.style.display = "block";
+            chat.style.display = "none";
+            exit.style.display = "block";
+        }
+        else
+        {
+            chatbot.style.display = "none";
+            chat.style.display = "block";
+            exit.style.display = "none";
+        }
+
+      }
+
+      // Supprime les symboles # générés pas l'IA lors de la génération des textes avec des titres
+      function cleanText(text) {
+        return text.replace(/[#]+/g, "").trim();
+      }
+
+      function createChatMessage({ sender, message }) {
+        // Crée l'élément de message principal
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        messageElement.dataset.sender = sender;
+
+        // Crée l'élément de contenu du message
+        const messageContentElement = document.createElement("div");
+
+        if (sender === "chatbot")
+          messageContentElement.classList.add("chatbot-message");
+        else messageContentElement.classList.add("user-message");
+
+        // Crée l'élément de l'avatar et du nom d'utilisateur
+        const avatarUsernameElement = document.createElement("div");
+        avatarUsernameElement.classList.add("avatar-username");
+
+        if(sender === "chatbot"){
+            const chatbotImage = document.createElement("span");
+            chatbotImage.classList.add("material-symbols-outlined");
+            chatbotImage.textContent = "smart_toy"
+            avatarUsernameElement.appendChild(chatbotImage);
+            messageContentElement.appendChild(avatarUsernameElement);
+        }
+
+
+
+        // Ajoute l'élément de l'avatar et du nom d'utilisateur au contenu du message
+
+        // Crée l'élément du texte du message
+        const messageTextElement = document.createElement("p");
+        messageTextElement.classList.add("message-text");
+        if(sender === 'chatbot')
+            messageTextElement.classList.add("chatbot-text");
+        else
+            messageTextElement.classList.add("user-text");
+
+        messageTextElement.textContent = message;
+
+        // Ajoute l'élément du texte du message au contenu du message
+        messageContentElement.appendChild(messageTextElement);
+
+        // Ajoute l'élément de contenu du message à l'élément de message principal
+        messageElement.appendChild(messageContentElement);
+
+        return messageElement;
+      }
+
+      function sendMessage() {
+        var userInput = document.getElementById("user-input");
+
+        var chatMessages = document.getElementById("chat-box");
+
+        const userMessage = createChatMessage({
+          sender: "user",
+          message: userInput.value,
+        });
+
+        chatMessages.appendChild(userMessage);
+
+        fetch("/{{LANGUAGE_CODE}}/main/chatbot/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: JSON.stringify({ message: userInput.value }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const botMessage = createChatMessage({
+              sender: "chatbot",
+              message: cleanText(data.response),
+            });
+            chatMessages.appendChild(botMessage);
+            console.log(data.response);
+            userInput.value = "";
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>

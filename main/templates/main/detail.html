@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{article.title}}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/detail.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="article-detail">
+        <h1>{{ article.title }}</h1>
+        <p class="publish-date">{% trans "Publié:" %} {{ article.publication_date|date:"j F Y, H:i" }}</p>
+        <div class="article-content">
+            <p>{{ article.content }}</p>
+        </div>
+    </div>
+</body>
