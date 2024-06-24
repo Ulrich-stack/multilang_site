@@ -1,6 +1,22 @@
 import dj_database_url
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement à partir du fichier .env
+load_dotenv()
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Clé API OpenAI
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+# Répertoire de stockage des index
+INDEX_STORAGE_DIR = os.path.join(BASE_DIR, 'data')
+
+# Assurez-vous que le répertoire existe
+os.makedirs(INDEX_STORAGE_DIR, exist_ok=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

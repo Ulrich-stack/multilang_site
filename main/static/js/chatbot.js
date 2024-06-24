@@ -88,7 +88,7 @@ function sendMessage() {
     chatMessages.appendChild(userMessage);
 
     // Envoie une requête POST à la vue chatbot avec le message de l'utilisateur
-    fetch("/{{LANGUAGE_CODE}}/main/chatbot/", {
+    fetch(`/fr/main/chatbot/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
