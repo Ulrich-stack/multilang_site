@@ -1,8 +1,8 @@
 body {
     font-family: 'Roboto', sans-serif;
-    font-size: 0.8rem; /* Taille de la police par défaut pour le corps */
-    background-color: #222831; /* Couleur de fond pour la page */
-    color: #EEEEEE; /* Couleur de texte par défaut */
+    font-size: 0.8rem;
+    background-color: #222831; 
+    color: #EEEEEE; 
     margin: 0;
     padding: 0;
     line-height: 1.6;
@@ -12,23 +12,23 @@ body {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #31363F; /* Couleur de fond de l'article */
+    background-color: #31363F;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .article-detail h1 {
-    color: #EEEEEE; /* Couleur du titre de l'article */
+    color: #EEEEEE; 
     margin-bottom: 20px;
 }
 
 .publish-date {
-    color: #3282B8; /* Couleur de la date de publication */
+    color: #3282B8;
     margin-bottom: 20px;
 }
 
 .article-content {
-    color: #EEEEEE; /* Couleur du contenu de l'article */
+    color: #EEEEEE; 
 }
 
 .article-content p {

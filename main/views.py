@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.utils.translation import get_language
 from django.http import JsonResponse
 from .models import Article
 from openai import OpenAI
@@ -14,8 +15,12 @@ load_dotenv()
 client = OpenAI()
 
 def index(request):
-    articles_liste = Article.objects.all()
-    return render(request, 'main/index.html', {"articles": articles_liste})
+    articles = Article.objects.all() # pour récupérer les articles de ma base de données
+    context = {
+        'articles': articles,
+        'LANGUAGE_CODE': get_language(), # pour récupérer le language actuel et le passer en contexte
+    }
+    return render(request, 'main/index.html', context)
 
 def detail(request, article_id):
     article = get_object_or_404(Article, pk = article_id)
@@ -25,10 +30,9 @@ def detail(request, article_id):
 def chatbot(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        user_message = data.get('message', '')
+        user_message = data.get('message', '') # récupère le message de l'utilisateur
 
-        # Make a request to OpenAI using the new API
-        response = client.chat.completions.create(
+        response = client.chat.completions.create( # fait une réquête à OpenAI
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},

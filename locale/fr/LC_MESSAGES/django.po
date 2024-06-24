@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-23 22:14+0200\n"
+"POT-Creation-Date: 2024-06-24 02:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,27 +26,26 @@ msgstr ""
 msgid "Articles"
 msgstr "Articles"
 
-#: .\main\templates\main\index.html:26
-msgid "Langue"
-msgstr ""
-
-#: .\main\templates\main\index.html:58
+#: .\main\templates\main\index.html:50
 msgid "Chatbot"
 msgstr ""
 
-#: .\main\templates\main\index.html:66
+#: .\main\templates\main\index.html:58
 msgid "Bonjour! Comment puis-je vous aider aujourd'hui?"
 msgstr ""
 
-#: .\main\templates\main\index.html:72
+#: .\main\templates\main\index.html:64
 msgid "Tapez votre message..."
 msgstr ""
 
-#: .\multilang_site\settings.py:115
+#: .\main\templates\main\index.html:76
+msgid "Langue:"
+msgstr ""
+
+#: .\multilang_site\settings.py:104
 msgid "English"
-msgstr "Anglais"
+msgstr ""
 
-#: .\multilang_site\settings.py:116
+#: .\multilang_site\settings.py:105
 msgid "French"
-msgstr "Français"
-
+msgstr ""
