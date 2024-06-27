@@ -14,7 +14,8 @@ load_dotenv()
 client = OpenAI()
 
 def index(request):
-    request.session.flush()  # Clear the session to reset the conversation history
+    # Réinitialiser la session pour réinitialiser l'historique des conversations
+    request.session.flush()  
     articles = Article.objects.all().order_by('-publication_date')
     context = {
         'articles': articles,
@@ -23,6 +24,7 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 def detail(request, article_id):
+    # Récupérer un article spécifique par son identifiant
     article = get_object_or_404(Article, pk=article_id)
     context = {
         'article': article,
@@ -33,32 +35,33 @@ def detail(request, article_id):
 @csrf_exempt
 def chatbot(request):
     if request.method == 'POST':
+        # Charger les données de la requête POST
         data = json.loads(request.body)
         user_message = data.get('message', '')
 
         if global_vectorstore is None:
-            return JsonResponse({'response': 'VectorStore not available'}, status=500)
+            return JsonResponse({'response': 'VectorStore non disponible'}, status=500)
 
-        # Retrieve the conversation history from the session, if it exists
+        # Récupérer l'historique des conversations de la session, si elle existe
         conversation_history = request.session.get('conversation_history', [])
 
-        # Append the new user message to the conversation history
+        # Ajouter le nouveau message de l'utilisateur à l'historique des conversations
         conversation_history.append({"role": "user", "content": user_message})
 
-        # Retrieve relevant documents from the vectorstore
+        # Récupérer les documents pertinents du vectorstore
         relevant_docs = global_vectorstore.similarity_search(query=user_message, k=3)
         context = "\n\n".join([doc.page_content for doc in relevant_docs])
 
-        # Construct the prompt
+        # Construire l'invite
         prompt = (
-            f"You are a helpful assistant. Use the provided context to answer the question as accurately as possible. "
-            f"If the context does not contain the information needed, use your own knowledge to provide a helpful and informative answer.\n\n"
-            f"Context: {context}\n\n"
-            f"Conversation History:\n" + "\n".join([msg["content"] for msg in conversation_history]) + "\n\n"
-            f"Question: {user_message}\nAnswer:"
+            f"Vous êtes un assistant utile. Utilisez le contexte fourni pour répondre à la question aussi précisément que possible. "
+            f"Si le contexte ne contient pas les informations nécessaires, utilisez vos propres connaissances pour fournir une réponse utile et informative.\n\n"
+            f"Contexte: {context}\n\n"
+            f"Historique des conversations:\n" + "\n".join([msg["content"] for msg in conversation_history]) + "\n\n"
+            f"Question: {user_message}\nRéponse:"
         )
 
-        # Make a request to OpenAI with the updated prompt
+        # Faire une requête à OpenAI avec l'invite mise à jour
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="gpt-3.5-turbo",
@@ -66,12 +69,12 @@ def chatbot(request):
 
         bot_response = response.choices[0].message.content
 
-        # Append the bot's response to the conversation history
+        # Ajouter la réponse du bot à l'historique des conversations
         conversation_history.append({"role": "assistant", "content": bot_response})
 
-        # Save the updated conversation history back into the session
+        # Enregistrer l'historique des conversations mis à jour dans la session
         request.session['conversation_history'] = conversation_history
 
         return JsonResponse({'response': bot_response})
 
-    return JsonResponse({'response': 'Invalid request method'}, status=400)
+    return JsonResponse({'response': 'Méthode de requête non valide'}, status=400)
