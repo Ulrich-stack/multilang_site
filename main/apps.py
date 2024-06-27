@@ -6,4 +6,4 @@ class MainConfig(AppConfig):
     name = 'main'
 
     def ready(self):
-        import main.signals  # Importer les signaux
+        import main.signals  # Importer les signaux qui vont nous permettre de savoir si un article est ajouté

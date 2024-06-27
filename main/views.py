@@ -24,7 +24,11 @@ def index(request):
 
 def detail(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
-    return render(request, "main/article.html", {"article": article})
+    context = {
+        'article': article,
+        'LANGUAGE_CODE': get_language(),
+    }
+    return render(request, "main/article.html", context)
 
 @csrf_exempt
 def chatbot(request):

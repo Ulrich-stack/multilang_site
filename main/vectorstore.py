@@ -24,5 +24,5 @@ def load_vectorstore():
         global_vectorstore = create_vectorstore()
     return global_vectorstore
 
-# Charger le vectorstore au démarrage de l'application
+# Charge le vectorstore au démarrage de l'application
 load_vectorstore()
