@@ -91,8 +91,8 @@ protobuf==4.25.3
 psycopg2-binary==2.9.9
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
-pydantic==2.7.4
-pydantic_core==2.18.4
+#pydantic==2.7.4
+#pydantic_core==2.18.4
 Pygments==2.18.0
 PyPika==0.48.9
 pyproject-toml==0.0.10
