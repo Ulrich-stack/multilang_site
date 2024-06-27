@@ -2,21 +2,27 @@
 FROM python:3.9-slim
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install dependencies
-RUN apt-get update && \
-    apt-get install -y sqlite3 libsqlite3-dev && \
-    apt-get clean
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Copy the current directory contents into the container at /usr/src/app
-COPY . .
+# Install any needed packages specified in requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Apply database migrations
+RUN python manage.py migrate
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
+# Set environment variables
+ENV DJANGO_SETTINGS_MODULE=multilang_site.settings
+ENV PYTHONUNBUFFERED=1
+
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "multilang_site.wsgi:application"]
+CMD ["gunicorn", "multilang_site.wsgi:application", "--bind", "0.0.0.0:8000"]
