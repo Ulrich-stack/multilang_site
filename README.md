@@ -74,41 +74,6 @@ python manage.py runserver
 
 Visit `http://localhost:8000` in your web browser to see the application.
 
-## Deployment
-
-### Using Docker
-
-To deploy the project using Docker on Render:
-
-1. Create a `Dockerfile` in your project root with the following content:
-
-    ```dockerfile
-    # Utiliser une image Python de base
-    FROM python:3.12
-
-    # Définir le répertoire de travail dans le conteneur
-    WORKDIR /app
-
-    # Copier les fichiers de votre projet dans le répertoire de travail
-    COPY . /app
-
-    # Installer les dépendances
-    RUN pip install --upgrade pip
-    RUN pip install -r requirements.txt
-
-    # Collecter les fichiers statiques
-    RUN python manage.py collectstatic --noinput
-
-    # Exposer le port sur lequel l'application va tourner
-    EXPOSE 8000
-
-    # Commande pour démarrer l'application
-    CMD ["gunicorn", "multilang_site.wsgi:application", "--bind", "0.0.0.0:8000"]
-    ```
-
-2. Make sure to set the environment variables on Render, including `OPENAI_API_KEY`.
-
-3. Follow Render's documentation to deploy your project.
 
 ## Environment Variables
 
