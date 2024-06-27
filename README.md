@@ -15,14 +15,14 @@ This project is a multilingual Django blog website with a chatbot feature. It is
 ## Features
 
 - Multilingual support
-- Integrated chatbot
+- Integrated chatbot using OpenAI and LangChain for RAG (Retrieval-Augmented Generation)
 - Dynamic language selector
 - Deployed using Docker on Render
 
 ## Requirements
 
 - Python 3.12
-- Dependancies in requirements.txt
+- Dependencies in requirements.txt
 
 ## Installation
 
@@ -51,7 +51,7 @@ pip install -r requirements.txt
 
 Create a `.env` file in the project root and add the following environment variables:
 
-
+```
 # OpenAI API Key
 OPENAI_API_KEY=your_openai_api_key
 ```
@@ -61,7 +61,6 @@ OPENAI_API_KEY=your_openai_api_key
 ```bash
 python manage.py migrate
 ```
-
 
 ## Running the Project
 
@@ -75,3 +74,44 @@ python manage.py runserver
 
 Visit `http://localhost:8000` in your web browser to see the application.
 
+## Deployment
+
+### Using Docker
+
+To deploy the project using Docker on Render:
+
+1. Create a `Dockerfile` in your project root with the following content:
+
+    ```dockerfile
+    # Utiliser une image Python de base
+    FROM python:3.12
+
+    # Définir le répertoire de travail dans le conteneur
+    WORKDIR /app
+
+    # Copier les fichiers de votre projet dans le répertoire de travail
+    COPY . /app
+
+    # Installer les dépendances
+    RUN pip install --upgrade pip
+    RUN pip install -r requirements.txt
+
+    # Collecter les fichiers statiques
+    RUN python manage.py collectstatic --noinput
+
+    # Exposer le port sur lequel l'application va tourner
+    EXPOSE 8000
+
+    # Commande pour démarrer l'application
+    CMD ["gunicorn", "multilang_site.wsgi:application", "--bind", "0.0.0.0:8000"]
+    ```
+
+2. Make sure to set the environment variables on Render, including `OPENAI_API_KEY`.
+
+3. Follow Render's documentation to deploy your project.
+
+## Environment Variables
+
+Ensure the following environment variables are set in your `.env` file or in your deployment environment:
+
+- `OPENAI_API_KEY`: Your OpenAI API key used for the chatbot.
