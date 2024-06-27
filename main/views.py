@@ -3,12 +3,10 @@ from django.http import JsonResponse
 from .models import Article
 from openai import OpenAI
 import json
-import os
 from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
 from django.utils.translation import gettext as _, get_language
 from .vectorstore import global_vectorstore
-import openai
 
 # Charger les variables d'environnement
 load_dotenv()

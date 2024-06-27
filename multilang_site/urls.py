@@ -8,5 +8,5 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
-    path('main/', include('main.urls')),  # Inclure les URLs de l'application principale
+    path('', include('main.urls')),  # Inclure les URLs de l'application principale
 )

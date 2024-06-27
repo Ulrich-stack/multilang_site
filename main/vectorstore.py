@@ -5,6 +5,7 @@ from .models import Article
 import openai
 import os
 
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Variable globale pour stocker le vectorstore

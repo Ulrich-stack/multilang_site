@@ -1,7 +1,7 @@
-import dj_database_url
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+
 
 # Charger les variables d'environnement à partir du fichier .env
 load_dotenv()
