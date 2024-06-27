@@ -1,87 +1,39 @@
-{% load i18n %} {% load static %}
+{% load i18n %} 
+{% load static %}
 <!DOCTYPE html>
 <html lang="{{LANGUAGE_CODE}}">
   <head>
     <meta charset="UTF-8" />
     <title>{% trans 'Articles' %}</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/style.css' %}"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-    />
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/language_selector.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
     <div class="main">
-      <div style="display: flex;">
-        <h1>{% trans 'Articles' %}</h1>
-      </div>
-
-      <div class="articles">
-        {% for article in articles %}
-        <div class="article">
-          <h2>
-            <a href="/{{LANGUAGE_CODE}}/{{ article.id }}/" 
-              >{{ article.title }}</a
-            > {# nous renvoie la page qui affiche l'article en entier #}
-          </h2>
-          <p class="date">{{ article.publication_date|date:"j F Y" }}</p>
-          <p>{{ article.content }}</p>
+        <div style="display: flex;">
+            <h1>{% trans 'Articles' %}</h1>
         </div>
-        {% endfor %}
-      </div>
-      <button class="chatbot-toggler" onclick="toggleChatbot()">
-        <span class="material-symbols-outlined" id = "chat">
-            chat_bubble
-        </span>
-        <span class="material-symbols-outlined" id = "exit" style =" display:none;">
-                close
-        </span>
-    </button>
-    {% comment %}
-    Ecriture du chatbot
-    {% endcomment %}
-    <div class="chat-bubble" id="chat-bubble" style = "display: none">
-        <header>
-          <h2>{% trans "Chatbot" %}</h2>
-        </header>
-        <div class="chat-box" id ="chat-box">
-            <div class="message" data-sender="chatbot">
-                <div class="chatbot-message">
-                    <div class="avatar-username">
-                        <span class="material-symbols-outlined">smart_toy</span>
-                    </div>
-                    <p class="message-text chatbot-text">{% trans "Bonjour! Comment puis-je vous aider aujourd'hui?" %}</p>
-                </div>
+
+        <div class="articles">
+            {% for article in articles %}
+            <div class="article">
+                <h2>
+                    <a href="/{{LANGUAGE_CODE}}/{{ article.id }}/">{{ article.title }}</a>
+                </h2>
+                <p class="date">{{ article.publication_date|date:"j F Y" }}</p>
+                <p>{{ article.content }}</p>
             </div>
-            
-        </div>
-        <div class="chat-input">
-            <textarea id ="user-input" placeholder='{% trans "Tapez votre message..." %}' required></textarea>
-            <span class="material-symbols-outlined" onclick="sendMessage('{{LANGUAGE_CODE}}')">
-                send
-                </span>
-        </div>
-      </div>
-    </div>
-    {# fin d'écriture du bot et début de l'écriture du choix des langues #}
-    <div class="dropdown">
-        <div class="dropdown-content">
-            {% get_current_language as LANGUAGE_CODE %} {% get_available_languages as LANGUAGES %} {% for lang in LANGUAGES %}
-            <a href="/{{ lang.0 }}/">{% trans lang.1 %}</a>
             {% endfor %}
-          </div>
-        <button class="dropbtn">{% trans 'Langue:' %} {% trans LANGUAGE_CODE %}</button>
-      </div>
+        </div>
 
-    <script src="{% static 'js/chatbot.js' %}">
-    </script>
-  </body>
+        <!-- Chatbot and Language Selector -->
+        {% include "partials/chatbot.html" with LANGUAGE_CODE=LANGUAGE_CODE %}
+        {% include "partials/language_selector.html" %}
+    </div>
+
+    <script src="{% static 'js/chatbot.js' %}"></script>
+</body>
 </html>

@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static %}
+<div>
+    <button class="chatbot-toggler" onclick="toggleChatbot()">
+        <span class="material-symbols-outlined" id="chat">chat_bubble</span>
+        <span class="material-symbols-outlined" id="exit" style="display:none;">close</span>
+    </button>
+    <div class="chat-bubble" id="chat-bubble" style="display: none">
+        <header>
+            <h2>Chatbot</h2>
+        </header>
+        <div class="chat-box" id="chat-box">
+            <div class="message" data-sender="chatbot">
+                <div class="chatbot-message">
+                    <div class="avatar-username">
+                        <span class="material-symbols-outlined">smart_toy</span>
+                    </div>
+                    <p class="message-text chatbot-text">{% trans "Bonjour! Comment puis-je vous aider aujourd'hui?" %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <textarea id="user-input" placeholder='{% trans "Tapez votre message..." %}' required></textarea>
+            <span class="material-symbols-outlined" onclick="sendMessage('{{LANGUAGE_CODE}}')">send</span>
+        </div>
+    </div>
+</div>
