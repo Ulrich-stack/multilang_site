@@ -74,40 +74,60 @@ function createChatMessage({ sender, message }) {
 }
 
 // Cette fonction récupère le message de l'utilisateur, fait une requête à la vue chatbot pour obtenir une réponse
-function sendMessage() {
+function sendMessage(lang) {
     var userInput = document.getElementById("user-input");
-
     var chatMessages = document.getElementById("chat-box");
 
-    // Crée le message de l'utilisateur et l'ajoute à la boîte de chat
+    // Create the user's message and add it to the chat box
     const userMessage = createChatMessage({
         sender: "user",
         message: userInput.value,
     });
-
     chatMessages.appendChild(userMessage);
 
-    // Envoie une requête POST à la vue chatbot avec le message de l'utilisateur
-    fetch(`/fr/main/chatbot/`, {
+    // Clear the input field
+    userInput.value = "";
+
+    // Show typing indicator
+    const typingIndicator = document.createElement("div");
+    typingIndicator.className = "message typing-indicator";
+    typingIndicator.innerHTML = `
+        <div class="chatbot-message">
+            <div class="avatar-username">
+                <span class="material-symbols-outlined">smart_toy</span>
+            </div>
+            <p class="message-text chatbot-text">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </p>
+        </div>
+    `;
+    chatMessages.appendChild(typingIndicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Send a POST request to the chatbot view with the user's message
+    fetch(`/${lang}/main/chatbot/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "X-CSRFToken": "{{ csrf_token }}",
         },
-        body: JSON.stringify({ message: userInput.value }),
+        body: JSON.stringify({ message: userMessage.innerText }),
     })
     .then((response) => response.json())
     .then((data) => {
-        // Crée le message du chatbot et l'ajoute à la boîte de chat
+        // Remove typing indicator
+        chatMessages.removeChild(typingIndicator);
+
+        // Create the chatbot's message and add it to the chat box
         const botMessage = createChatMessage({
             sender: "chatbot",
             message: cleanText(data.response),
         });
         chatMessages.appendChild(botMessage);
-        console.log(data.response);
-        userInput.value = "";
 
-        // Fais défiler la boîte de chat vers le bas pour montrer le nouveau message
+        // Scroll the chat box to the bottom to show the new message
         chatMessages.scrollTop = chatMessages.scrollHeight;
     })
     .catch((error) => {

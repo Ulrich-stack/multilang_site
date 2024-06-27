@@ -1,8 +1,7 @@
 from django.contrib import admin
-from .models import Article, Embedding
+from .models import Article
 
 # Register your models here.
 
 admin.site.register(Article)
-admin.site.register(Embedding)
 

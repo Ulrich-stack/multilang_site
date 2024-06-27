@@ -1,12 +1,14 @@
-import openai
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
-from .models import Embedding, Article
 from langchain_core.documents import Document
-
+from langchain_community.vectorstores import Chroma
+from .models import Article
+import openai
 import os
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# Variable globale pour stocker le vectorstore
+global_vectorstore = None
 
 def create_vectorstore():
     articles = Article.objects.all()
@@ -15,9 +17,11 @@ def create_vectorstore():
     vectorstore = Chroma.from_documents(documents=documents, embedding=embeddings)
     return vectorstore
 
-def update_index(new_documents):
-    vectorstore = create_vectorstore()
-    new_docs = [Document(page_content=doc["page_content"], metadata=doc["metadata"]) for doc in new_documents]
-    vectorstore.add_documents(new_docs)
+def load_vectorstore():
+    global global_vectorstore
+    if global_vectorstore is None:
+        global_vectorstore = create_vectorstore()
+    return global_vectorstore
 
-    
+# Charger le vectorstore au démarrage de l'application
+load_vectorstore()

@@ -12,7 +12,7 @@
         <h1>{{ article.title }}</h1>
         <p class="publish-date">{% trans "Publié:" %} {{ article.publication_date|date:"j F Y, H:i" }}</p>
         <div class="article-content">
-            <p>{{ article.content }}</p>
+            {{ article.content|linebreaksbr }}
         </div>
     </div>
 </body>
