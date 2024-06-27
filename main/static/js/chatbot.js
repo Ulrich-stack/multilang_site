@@ -107,7 +107,7 @@ function sendMessage(lang) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     // Send a POST request to the chatbot view with the user's message
-    fetch(`/${lang}/main/chatbot/`, {
+    fetch(`/${lang}/chatbot/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
